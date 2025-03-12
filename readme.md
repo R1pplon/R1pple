@@ -99,7 +99,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    @Column(name = "user_id") // 显式映射列名
+    private Long userId;      // 使用驼峰命名
 
     @Column(nullable = false, unique = true)
     private String nickname;
@@ -126,7 +127,8 @@ public class User {
 public class Article {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long article_id;
+  @Column(name = "article_id") // 显式映射列名
+  private Long articleId;      // 使用驼峰命名
 
   @Column(nullable = false, length = 200)
   private String title;
@@ -157,7 +159,8 @@ public class Article {
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    @Column(name = "comment_id") // 显式映射列名
+    private Long commentId;      // 使用驼峰命名
 
     @Column(nullable = false, length = 500)
     private String content;
