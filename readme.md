@@ -6,7 +6,7 @@ spring boot + JPA + MySQL
 
 ### 依赖项
 
-```
+```TXT
 spring boot devtools
 lombok
 spring web
@@ -77,7 +77,7 @@ spring:
     show-sql: true
 ```
 
-### model
+### Model
 
 总结步骤：
 
@@ -203,6 +203,43 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
+### Response
+
+**response** 包主要用于定义服务返回给客户端的数据结构
+
+```java
+// ArticleResponse
+@Data
+@Builder
+public class ArticleResponse {
+    private Long articleId;
+    private String title;
+    private String content;
+    private Long authorId;
+    private LocalDateTime createTime;
+}
+
+// CommentResponse
+@Data
+@Builder
+public class CommentResponse {
+    private Long commentId;
+    private String content;
+    private Long articleId;
+    private Long commenterId;
+    private LocalDateTime createTime;
+}
+
+// UserResponse
+@Data
+@Builder
+public class UserResponse {
+    private Long userId;
+    private String nickname;
+    private LocalDateTime createTime;
+}
+```
+
 ### Service
 
 为什么先做服务层？
@@ -212,8 +249,135 @@ public interface UserRepository extends JpaRepository<User, Long> {
 3. **便于事务控制**：通过服务层方法界定事务边界
 4. **促进测试驱动开发**：可先编写服务层测试用例，再实现细节
 
-#### ArticleService
+```java
+// ArticleService.java
+public interface ArticleService {
+    ArticleResponse getArticleById(Long articleId);
+}
 
-#### CommentService
+// CommentService
+public interface CommentService {
+    CommentResponse getCommentById(Long commentId);
+}
 
-#### UserService
+// UserService
+public interface UserService {
+    UserResponse getUserById(Long userId);
+}
+```
+
+#### ArticleServiceImpl
+
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class ArticleServiceImpl implements ArticleService {
+    private final ArticleRepository articleRepository;
+
+    @Override
+    public ArticleResponse getArticleById(Long articleId) {
+        return articleRepository.findById(articleId)
+                .map(this::convertToArticleResponse)
+                .orElseThrow(() -> new EntityNotFoundException("文章不存在"));
+    }
+
+    private ArticleResponse convertToArticleResponse(Article article) {
+        return ArticleResponse.builder()
+                .articleId(article.getArticleId())
+                .title(article.getTitle())
+                .content(article.getContent())
+                .authorId(article.getAuthor().getUserId())
+                .createTime(article.getCreateTime())
+                .build();
+    }
+}
+```
+
+#### CommentServiceImpl
+
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CommentServiceImpl implements CommentService {
+    private final CommentRepository commentRepository;
+
+    @Override
+    public CommentResponse getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .map(this::convertToCommentResponse)
+                .orElseThrow(() -> new EntityNotFoundException("评论不存在"));
+    }
+
+    private CommentResponse convertToCommentResponse(Comment comment) {
+        return CommentResponse.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .articleId(comment.getArticle().getArticleId())
+                .commenterId(comment.getCommenter().getUserId())
+                .createTime(comment.getCreateTime())
+                .build();
+    }
+}
+```
+
+#### UserServiceImpl
+
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+
+    @Override
+    public UserResponse getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .map(this::convertToUserResponse)
+                .orElseThrow(() -> new EntityNotFoundException("用户不存在"));
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .createTime(user.getCreateTime())
+                .build();
+    }
+}
+```
+
+### Controller
+
+```java
+// ArticleController.java
+@RestController
+@RequestMapping("/api/articles")
+@RequiredArgsConstructor
+@Tag(name = "文章接口")
+public class ArticleController {
+    private final ArticleService articleService;
+
+    @GetMapping("/{articleId}")
+    @Operation(summary = "根据ID获取文章信息")
+    public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId) {
+        return ResponseEntity.ok(articleService.getArticleById(articleId));
+    }
+}
+
+// UserController
+@RestController
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
+@Tag(name = "用户接口")
+public class UserController {
+    private final UserService userService;
+
+    @GetMapping("/{userId}")
+    @Operation(summary = "根据ID获取用户信息")
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
+}
+```
