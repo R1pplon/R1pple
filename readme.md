@@ -202,3 +202,18 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
+
+### Service
+
+为什么先做服务层？
+
+1. **解耦控制器与持久层**：Controller 只处理 HTTP 协议，不直接操作 Repository
+2. **业务逻辑集中管理**：确保相同的业务规则在多个入口（如Web/API）保持一致
+3. **便于事务控制**：通过服务层方法界定事务边界
+4. **促进测试驱动开发**：可先编写服务层测试用例，再实现细节
+
+#### ArticleService
+
+#### CommentService
+
+#### UserService
