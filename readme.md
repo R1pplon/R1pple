@@ -6,7 +6,7 @@ spring boot + JPA + MySQL
 
 ### 依赖项
 
-```xml
+```
 spring boot devtools
 lombok
 spring web
