@@ -1,5 +1,23 @@
 # R1pple个人博客构建过程
 
+## 计程
+
+### 第1天
+
+#### 完成
+
+- 创建项目
+- 创建数据库
+- 初始化软件包Model/Repository/Response/Service/Controller
+- 测试api
+
+#### 待完成
+
+- **service**层有点看不懂
+- **lombok**学习
+- vue建立基本页面
+- vue前端调用api
+
 ## 后端
 
 spring boot + JPA + MySQL
