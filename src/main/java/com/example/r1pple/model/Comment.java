@@ -13,7 +13,8 @@ import lombok.Setter;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    @Column(name = "comment_id") // 显式映射列名
+    private Long commentId;      // 使用驼峰命名
 
     @Column(nullable = false, length = 500)
     private String content;

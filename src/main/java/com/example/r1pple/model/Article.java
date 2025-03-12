@@ -15,7 +15,8 @@ import java.util.List;
 public class Article {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long article_id;
+  @Column(name = "article_id") // 显式映射列名
+  private Long articleId;      // 使用驼峰命名
 
   @Column(nullable = false, length = 200)
   private String title;

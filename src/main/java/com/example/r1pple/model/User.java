@@ -16,7 +16,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    @Column(name = "user_id") // 显式映射列名
+    private Long userId;      // 使用驼峰命名
 
     @Column(nullable = false, unique = true)
     private String nickname;
