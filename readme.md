@@ -10,6 +10,10 @@
 - 创建数据库
 - 初始化软件包Model/Repository/Response/Service/Controller
 - 测试api
+  - 根据ID查询文章`/api/articles/${id}`
+  - 根据ID查询用户`/api/users/${id}`
+  - 查询所有文章`/api/articles/all`
+  - 查询所有用户`/api/users/all`
 
 #### 待完成
 
