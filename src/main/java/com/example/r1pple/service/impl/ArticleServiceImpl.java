@@ -1,6 +1,5 @@
 package com.example.r1pple.service.impl;
 
-import com.example.r1pple.DTO.response.ArticleListResponse;
 import com.example.r1pple.DTO.response.ArticleResponse;
 import com.example.r1pple.model.Article;
 import com.example.r1pple.repository.ArticleRepository;
@@ -30,31 +29,34 @@ public class ArticleServiceImpl implements ArticleService {
     // 将Article对象转换为ArticleResponse对象
     private ArticleResponse convertToArticleResponse(Article article) {
         return ArticleResponse.builder()
-                .articleId(article.getArticleId())
-                .title(article.getTitle())
-                .content(article.getContent())
-                .authorId(article.getAuthor().getUserId())
-                .createTime(article.getCreateTime())
+                .articleId(article.getArticleId())  // 文章ID
+                .title(article.getTitle())  // 文章标题
+                .content(article.getContent())  // 文章内容
+                .authorName(article.getAuthor().getNickname())  // 作者名称
+                .createTime(article.getCreateTime())    // 文章发布时间
+                .commentCount(article.getComments().size()) // 文章下评论数量
                 .build();
     }
 
-    // 获取所有文章
+    // 获取所有文章,不含正文
+    // 用于列表
     @Override
     @Transactional(readOnly = true)
-    public List<ArticleListResponse> getAllArticles() {
+    public List<ArticleResponse> getAllArticles() {
         return articleRepository.findAllArticlesWithRelations().stream()
                 .map(this::convertToArticleListResponse)
                 .collect(Collectors.toList());
     }
 
     // 将Article对象转换为ArticleListResponse对象
-    private ArticleListResponse convertToArticleListResponse(Article article) {
-        return ArticleListResponse.builder()
-                .articleId(article.getArticleId())
-                .title(article.getTitle())
+    // 不含正文
+    private ArticleResponse convertToArticleListResponse(Article article) {
+        return ArticleResponse.builder()
+                .articleId(article.getArticleId())  // 文章ID
+                .title(article.getTitle())  // 文章标题
                 .authorName(article.getAuthor().getNickname()) // 获取作者昵称
-                .createTime(article.getCreateTime())
-                .commentCount(article.getComments().size()) // 统计评论数
+                .createTime(article.getCreateTime())    // 文章发布时间
+                .commentCount(article.getComments().size()) // 文章下评论数量
                 .build();
     }
 }

@@ -8,10 +8,11 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class ArticleResponse {
-    private Integer articleId;
-    private String title;
-    private String content;
-    private Integer authorId;
-    private LocalDateTime createTime;
+    private Integer articleId; // 文章ID
+    private String title;   // 文章标题
+    private String content; // 文章内容
+    private String authorName;  // 作者名称
+    private LocalDateTime createTime;   // 文章发布时间
+    private Integer commentCount;   // 文章下评论数量
 }
 

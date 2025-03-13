@@ -1,6 +1,5 @@
 package com.example.r1pple.service.impl;
 
-import com.example.r1pple.DTO.response.UserListResponse;
 import com.example.r1pple.DTO.response.UserResponse;
 import com.example.r1pple.model.User;
 import com.example.r1pple.repository.UserRepository;
@@ -39,20 +38,9 @@ public class UserServiceImpl implements UserService {
     // 获取所有用户信息
     @Override
     @Transactional(readOnly = true)
-    public List<UserListResponse> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAllUsersWithRelations().stream()
-                .map(this::convertToUserListResponse)
+                .map(this::convertToUserResponse)
                 .collect(Collectors.toList());
-    }
-
-    // 将User对象转换为UserResponse对象
-    private UserListResponse convertToUserListResponse(User user) {
-        return UserListResponse.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .createTime(user.getCreateTime())
-                .articlesCount(user.getArticles().size())
-                .commentCount(user.getComments().size())
-                .build();
     }
 }

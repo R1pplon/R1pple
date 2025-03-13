@@ -1,6 +1,5 @@
 package com.example.r1pple.controller;
 
-import com.example.r1pple.DTO.response.UserListResponse;
 import com.example.r1pple.DTO.response.UserResponse;
 import com.example.r1pple.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +29,7 @@ public class UserController {
     // 获取所有用户
     @GetMapping("/all")
     @Operation(summary = "获取所有用户")
-    public ResponseEntity<List<UserListResponse>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 }

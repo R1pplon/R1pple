@@ -1,6 +1,5 @@
 package com.example.r1pple.controller;
 
-import com.example.r1pple.DTO.response.ArticleListResponse;
 import com.example.r1pple.DTO.response.ArticleResponse;
 import com.example.r1pple.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +30,7 @@ public class ArticleController {
     @GetMapping("/all")
     @Operation(summary = "获取所有文章",
             description = "返回按时间倒序排列的文章列表")
-    public ResponseEntity<List<ArticleListResponse>> getAllArticles() {
+    public ResponseEntity<List<ArticleResponse>> getAllArticles() {
         return ResponseEntity.ok(articleService.getAllArticles());
     }
 }
