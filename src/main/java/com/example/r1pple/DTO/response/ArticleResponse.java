@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class ArticleResponse {
-    private Long articleId;
+    private Integer articleId;
     private String title;
     private String content;
-    private Long authorId;
+    private Integer authorId;
     private LocalDateTime createTime;
 }
 

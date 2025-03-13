@@ -6,7 +6,10 @@ import com.example.r1pple.DTO.response.UserResponse;
 import java.util.List;
 
 public interface UserService {
-    UserResponse getUserById(Long userId);
+    // 根据ID获取用户信息
+    UserResponse getUserById(Integer userId);
+
+    // 获取所有用户
     List<UserListResponse> getAllUsers();
 }
 

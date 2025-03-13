@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "根据ID获取用户信息")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long userId) {
+    public ResponseEntity<UserResponse> getUser(@PathVariable Integer userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 

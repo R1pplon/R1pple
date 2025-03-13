@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ArticleRepository extends JpaRepository<Article, Long> {
+public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
     // 查询所有文章，并加载关联的实体
     // 使用 EntityGraph 来加载关联的实体，避免 N+1 查询

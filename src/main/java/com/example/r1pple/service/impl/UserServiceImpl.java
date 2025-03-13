@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     // 根据ID获取用户信息
     @Override
-    public UserResponse getUserById(Long userId) {
+    public UserResponse getUserById(Integer userId) {
         return userRepository.findById(userId)
                 .map(this::convertToUserResponse)
                 .orElseThrow(() -> new EntityNotFoundException("用户不存在"));

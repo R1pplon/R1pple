@@ -21,7 +21,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     // 根据ID获取文章信息
     @Override
-    public ArticleResponse getArticleById(Long articleId) {
+    public ArticleResponse getArticleById(Integer articleId) {
         return articleRepository.findById(articleId)
                 .map(this::convertToArticleResponse)
                 .orElseThrow(() -> new EntityNotFoundException("文章不存在"));

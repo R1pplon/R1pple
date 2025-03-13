@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class UserResponse {
-    private Long userId;
+    private Integer userId;
     private String nickname;
     private LocalDateTime createTime;
 }

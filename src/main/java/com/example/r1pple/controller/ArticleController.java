@@ -23,7 +23,7 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     @Operation(summary = "根据ID获取文章信息")
-    public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId) {
+    public ResponseEntity<ArticleResponse> getArticle(@PathVariable Integer articleId) {
         return ResponseEntity.ok(articleService.getArticleById(articleId));
     }
 

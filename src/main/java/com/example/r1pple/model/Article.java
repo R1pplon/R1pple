@@ -18,7 +18,7 @@ public class Article {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "article_id") // 显式映射列名
-  private Long articleId;      // 使用驼峰命名
+  private Integer articleId;      // 使用驼峰命名
 
   @CreatedDate
   @Column(name = "create_time", updatable = false)

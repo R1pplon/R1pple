@@ -16,7 +16,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id") // 显式映射列名
-    private Long commentId;      // 使用驼峰命名
+    private Integer commentId;      // 使用驼峰命名
 
     @CreatedDate
     @Column(name = "create_time", updatable = false)

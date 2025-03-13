@@ -257,3 +257,112 @@ public class UserController {
     }
 }
 ```
+
+## 根据ID获取用户信息
+
+### Model
+
+```java
+@Getter
+@Setter
+@Entity
+@Table(name = "user")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id") // 显式映射列名
+    private Integer userId;      // 使用驼峰命名
+
+    @CreatedDate
+    @Column(name = "create_time", updatable = false)
+    private LocalDateTime createTime;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
+    // 用户与文章的 1:N 关系（懒加载 + 级联删除）
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore  // 防止JSON无限递归
+    private List<Article> articles = new ArrayList<>();
+
+    // 用户与评论的 1:N 关系
+    @OneToMany(mappedBy = "commenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
+}
+```
+
+### Response
+
+```java
+@Data
+@Builder
+public class UserResponse {
+    private Integer userId;
+    private String nickname;
+    private LocalDateTime createTime;
+}
+```
+
+### Repository
+
+```java
+@Repository
+public interface UserRepository extends JpaRepository<User, Integer> {
+}
+// 基本方法已经自动生成，无需再添加
+```
+
+### Service
+
+```java
+// 接口
+public interface UserService {
+    // 根据ID获取用户信息
+    UserResponse getUserById(Integer userId);
+}
+
+// 实现
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+
+    // 根据ID获取用户信息
+    @Override
+    public UserResponse getUserById(Integer userId) {
+        return userRepository.findById(userId)
+                .map(this::convertToUserResponse)
+                .orElseThrow(() -> new EntityNotFoundException("用户不存在"));
+    }
+
+    // 将User对象转换为UserResponse对象
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .createTime(user.getCreateTime())
+                .build();
+    }
+}
+```
+
+### Controller
+
+```java
+@RestController
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
+@Tag(name = "用户接口")
+public class UserController {
+    private final UserService userService;
+
+    @GetMapping("/{userId}")
+    @Operation(summary = "根据ID获取用户信息")
+    public ResponseEntity<UserResponse> getUser(@PathVariable Integer userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
+}
+```
