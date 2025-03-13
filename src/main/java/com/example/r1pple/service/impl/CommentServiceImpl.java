@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
                 .commentId(comment.getCommentId())
                 .content(comment.getContent())
                 .articleId(comment.getArticle().getArticleId())
-                .commenterId(comment.getCommenter().getUserId())
+                .commenterName(comment.getCommenter().getNickname())
                 .createTime(comment.getCreateTime())
                 .build();
     }

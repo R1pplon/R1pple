@@ -1,7 +1,9 @@
 package com.example.r1pple.service.impl;
 
 import com.example.r1pple.DTO.response.ArticleResponse;
+import com.example.r1pple.DTO.response.CommentResponse;
 import com.example.r1pple.model.Article;
+import com.example.r1pple.model.Comment;
 import com.example.r1pple.repository.ArticleRepository;
 import com.example.r1pple.service.ArticleService;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +30,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     // 将Article对象转换为ArticleResponse对象
     private ArticleResponse convertToArticleResponse(Article article) {
+        List<CommentResponse> commentResponses = article.getComments().stream()
+                .map(this::convertToCommentResponse)
+                .collect(Collectors.toList());
+
         return ArticleResponse.builder()
                 .articleId(article.getArticleId())  // 文章ID
                 .title(article.getTitle())  // 文章标题
@@ -35,6 +41,18 @@ public class ArticleServiceImpl implements ArticleService {
                 .authorName(article.getAuthor().getNickname())  // 作者名称
                 .createTime(article.getCreateTime())    // 文章发布时间
                 .commentCount(article.getComments().size()) // 文章下评论数量
+                .comments(commentResponses) // 文章下评论列表
+                .build();
+    }
+
+    // 将Comment对象转换为CommentResponse对象
+    private CommentResponse convertToCommentResponse(Comment comment) {
+        return CommentResponse.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .articleId(comment.getArticle().getArticleId())
+                .commenterName(comment.getCommenter().getNickname())
+                .createTime(comment.getCreateTime())
                 .build();
     }
 
