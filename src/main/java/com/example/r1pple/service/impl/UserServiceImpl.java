@@ -6,9 +6,9 @@ import com.example.r1pple.model.User;
 import com.example.r1pple.repository.UserRepository;
 import com.example.r1pple.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
